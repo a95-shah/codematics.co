@@ -3,17 +3,9 @@
 import { CldUploadWidget } from "next-cloudinary";
 import { HiUpload, HiTrash } from "react-icons/hi";
 
-interface CloudinaryUploadResult {
-  info: {
-    secure_url: string;
-    [key: string]: any;
-  };
-  event?: string;
-}
-
 export default function ImageUpload({ value, onChange }: { value: string, onChange: (url: string) => void }) {
-  const handleSuccess = (result: CloudinaryUploadResult) => {
-    if (result?.info?.secure_url) {
+  const handleSuccess = (result: any) => {
+    if (typeof result?.info === 'object' && result?.info?.secure_url) {
       onChange(result.info.secure_url);
     }
   };
