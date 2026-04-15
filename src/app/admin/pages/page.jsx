@@ -88,102 +88,107 @@ export default function PagesAdmin() {
   };
 
   return (
-    <div className="space-y-10 pb-20">
-      <div className="border-b border-gray-100 pb-6 flex items-center justify-between">
+    <div className="space-y-6 md:space-y-10 pb-20">
+      <div className="border-b border-glass-border pb-4 md:pb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight flex items-center">
-            <HiDocumentText className="mr-3 text-blue-500" />
+          <h1 className="text-2xl md:text-3xl font-extrabold text-white-theme tracking-tight flex items-center">
+            <HiDocumentText className="mr-3 text-[#c92228] shrink-0" />
             Static Pages
           </h1>
           <p className="mt-1 text-sm text-gray-500">Edit content for your landing pages.</p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-10">
-        <div className="lg:col-span-1 space-y-3">
-          <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-4">Select Page</label>
-          {pages.map((p) => (
-            <button
-              key={p.slug}
-              onClick={() => fetchPageData(p.slug)}
-              className={`w-full text-left px-5 py-4 rounded-xl border text-sm font-black transition-all ${
-                selectedSlug === p.slug
-                  ? 'bg-blue-600 text-white-theme border-blue-600 shadow-xl shadow-blue-100 scale-105 z-10'
-                  : 'bg-white text-gray-700 border-gray-100 hover:border-blue-300 hover:bg-blue-50/50'
-              }`}
-            >
-              {p.name}
-            </button>
-          ))}
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 md:gap-10">
+        {/* Page Selector */}
+        <div className="lg:col-span-1">
+          <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-3 md:mb-4">Select Page</label>
+          {/* Mobile: horizontal scroll, Desktop: vertical list */}
+          <div className="flex lg:flex-col gap-2 md:gap-3 overflow-x-auto lg:overflow-x-visible pb-2 lg:pb-0 -mx-1 px-1">
+            {pages.map((p) => (
+              <button
+                key={p.slug}
+                onClick={() => fetchPageData(p.slug)}
+                className={`whitespace-nowrap lg:w-full text-left px-4 md:px-5 py-3 md:py-4 rounded-xl border text-sm font-black transition-all shrink-0 ${
+                  selectedSlug === p.slug
+                    ? 'bg-[#c92228] text-white-theme border-[#c92228] shadow-xl shadow-red-900/20 lg:scale-105 z-10'
+                    : 'bg-bg-secondary text-gray-400 border-glass-border hover:border-[#c92228]/30 hover:bg-glass-bg'
+                }`}
+              >
+                {p.name}
+              </button>
+            ))}
+          </div>
         </div>
 
+        {/* Content Editor */}
         <div className="lg:col-span-3">
           {!selectedSlug ? (
-            <div className="bg-gray-50 border-2 border-dashed border-gray-200 rounded-2xl h-[400px] flex items-center justify-center text-gray-400 text-sm font-medium italic">
-              Select a page from the left to start editing.
+            <div className="bg-bg-secondary border-2 border-dashed border-glass-border rounded-2xl h-[300px] md:h-[400px] flex items-center justify-center text-gray-500 text-sm font-medium italic px-4 text-center">
+              Select a page from {typeof window !== 'undefined' && window.innerWidth >= 1024 ? 'the left' : 'above'} to start editing.
             </div>
           ) : loading ? (
-            <div className="text-center p-20 font-black text-blue-600 animate-pulse">Loading content...</div>
+            <div className="text-center p-16 md:p-20 font-black text-[#c92228] animate-pulse">Loading content...</div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-10 animate-fade-in">
-              <div className="bg-white p-10 rounded-2xl shadow-sm border border-gray-100 space-y-8 relative">
-                <div className="absolute top-0 left-0 w-full h-1 bg-blue-500 rounded-t-2xl"></div>
-                <h3 className="text-xl font-black text-gray-900 uppercase tracking-widest border-b border-gray-50 pb-4">Hero Section</h3>
-                <div className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6 md:space-y-10 animate-fade-in">
+              <div className="bg-bg-secondary p-5 md:p-8 lg:p-10 rounded-xl md:rounded-2xl shadow-sm border border-glass-border space-y-6 md:space-y-8 relative">
+                <div className="absolute top-0 left-0 w-full h-1 bg-[#c92228] rounded-t-xl md:rounded-t-2xl"></div>
+                <h3 className="text-lg md:text-xl font-black text-white-theme uppercase tracking-widest border-b border-glass-border pb-3 md:pb-4">Hero Section</h3>
+                <div className="space-y-4 md:space-y-6">
                   <div>
                     <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Browser Title</label>
-                    <input type="text" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent font-medium" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="e.g. Home | Codematics" />
+                    <input type="text" className="w-full px-4 py-3 rounded-xl bg-bg-primary border border-glass-border focus:border-[#c92228] text-white-theme font-medium outline-none transition-all text-sm md:text-base" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="e.g. Home | Codematics" />
                   </div>
                   <div>
                     <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Hero Headline</label>
-                    <input type="text" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg font-black" value={form.heroTitle} onChange={(e) => setForm({ ...form, heroTitle: e.target.value })} />
+                    <input type="text" className="w-full px-4 py-3 rounded-xl bg-bg-primary border border-glass-border focus:border-[#c92228] text-white-theme text-base md:text-lg font-black outline-none transition-all" value={form.heroTitle} onChange={(e) => setForm({ ...form, heroTitle: e.target.value })} />
                   </div>
                   <div>
                     <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Hero Subtitle</label>
-                    <textarea className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent min-h-[80px]" value={form.heroSubtitle} onChange={(e) => setForm({ ...form, heroSubtitle: e.target.value })} />
+                    <textarea className="w-full px-4 py-3 rounded-xl bg-bg-primary border border-glass-border focus:border-[#c92228] text-white-theme min-h-[80px] outline-none transition-all text-sm md:text-base" value={form.heroSubtitle} onChange={(e) => setForm({ ...form, heroSubtitle: e.target.value })} />
                   </div>
                 </div>
               </div>
 
-              <div className="bg-white p-10 rounded-2xl shadow-sm border border-gray-100 space-y-8 relative">
-                <div className="absolute top-0 left-0 w-full h-1 bg-indigo-500 rounded-t-2xl"></div>
-                <div className="flex justify-between items-center border-b border-gray-50 pb-4">
-                  <h3 className="text-xl font-black text-gray-900 uppercase tracking-widest">Page Sections</h3>
-                  <button type="button" onClick={addSection} className="text-xs font-black text-indigo-600 flex items-center hover:underline bg-indigo-50 px-3 py-1 rounded-full uppercase tracking-widest border border-indigo-100">
+              <div className="bg-bg-secondary p-5 md:p-8 lg:p-10 rounded-xl md:rounded-2xl shadow-sm border border-glass-border space-y-6 md:space-y-8 relative">
+                <div className="absolute top-0 left-0 w-full h-1 bg-[#c92228]/60 rounded-t-xl md:rounded-t-2xl"></div>
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center border-b border-glass-border pb-3 md:pb-4 gap-3">
+                  <h3 className="text-lg md:text-xl font-black text-white-theme uppercase tracking-widest">Page Sections</h3>
+                  <button type="button" onClick={addSection} className="text-xs font-black text-[#c92228] flex items-center hover:underline bg-[#c92228]/10 px-3 py-1.5 rounded-full uppercase tracking-widest border border-[#c92228]/20 self-start sm:self-auto">
                     <HiPlus className="mr-1" /> Add New Section
                   </button>
                 </div>
                 
-                <div className="space-y-12">
+                <div className="space-y-8 md:space-y-12">
                   {form.sections.map((section, index) => (
-                    <div key={index} className="group relative p-8 bg-gray-50 rounded-2xl border border-gray-100 hover:border-indigo-300 transition-all shadow-inner-sm">
-                      <button type="button" onClick={() => removeSection(index)} className="absolute -top-3 -right-3 p-2 bg-white text-red-500 rounded-full shadow-lg border border-red-100 hover:bg-red-50 transition-colors">
-                        <HiTrash className="h-4 w-4" />
+                    <div key={index} className="group relative p-5 md:p-8 bg-bg-primary rounded-xl md:rounded-2xl border border-glass-border hover:border-[#c92228]/30 transition-all">
+                      <button type="button" onClick={() => removeSection(index)} className="absolute -top-2 -right-2 md:-top-3 md:-right-3 p-1.5 md:p-2 bg-bg-secondary text-red-500 rounded-full shadow-lg border border-glass-border hover:bg-red-900/20 transition-colors z-10">
+                        <HiTrash className="h-3 w-3 md:h-4 md:w-4" />
                       </button>
-                      <div className="space-y-6">
+                      <div className="space-y-4 md:space-y-6">
                         <div>
-                          <label className="block text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em] mb-2">Section {index + 1} Heading</label>
-                          <input type="text" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 focus:border-transparent font-bold text-gray-900" value={section.heading} onChange={(e) => updateSection(index, 'heading', e.target.value)} />
+                          <label className="block text-[10px] font-black text-[#c92228]/70 uppercase tracking-[0.2em] mb-2">Section {index + 1} Heading</label>
+                          <input type="text" className="w-full px-4 py-3 rounded-xl bg-bg-secondary border border-glass-border focus:border-[#c92228] text-white-theme font-bold outline-none transition-all text-sm md:text-base" value={section.heading} onChange={(e) => updateSection(index, 'heading', e.target.value)} />
                         </div>
                         <div>
-                          <label className="block text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em] mb-2">Section {index + 1} Body Copy</label>
-                          <textarea className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 focus:border-transparent min-h-[140px] leading-relaxed italic" value={section.body} onChange={(e) => updateSection(index, 'body', e.target.value)} />
+                          <label className="block text-[10px] font-black text-[#c92228]/70 uppercase tracking-[0.2em] mb-2">Section {index + 1} Body Copy</label>
+                          <textarea className="w-full px-4 py-3 rounded-xl bg-bg-secondary border border-glass-border focus:border-[#c92228] text-white-theme min-h-[120px] md:min-h-[140px] leading-relaxed italic outline-none transition-all text-sm md:text-base" value={section.body} onChange={(e) => updateSection(index, 'body', e.target.value)} />
                         </div>
                       </div>
                     </div>
                   ))}
                   {form.sections.length === 0 && (
-                    <div className="text-center py-10 text-gray-400 text-sm font-medium italic italic">No custom sections added yet.</div>
+                    <div className="text-center py-8 md:py-10 text-gray-500 text-sm font-medium italic">No custom sections added yet.</div>
                   )}
                 </div>
               </div>
 
-              <div className="flex items-center justify-between sticky bottom-4 bg-white/80 backdrop-blur-md p-6 rounded-2xl border border-blue-100 shadow-2xl z-20">
-                <span className={`text-sm font-black uppercase tracking-widest ${message.includes('Error') ? 'text-red-600' : 'text-green-600'}`}>
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 sticky bottom-2 md:bottom-4 bg-bg-secondary/90 backdrop-blur-md p-4 md:p-6 rounded-xl md:rounded-2xl border border-glass-border shadow-2xl z-20">
+                <span className={`text-xs md:text-sm font-black uppercase tracking-widest text-center sm:text-left ${message.includes('Error') ? 'text-red-600' : 'text-emerald-500'}`}>
                   {message}
                 </span>
-                <button type="submit" disabled={loading} className="px-12 py-4 bg-blue-600 text-white-theme rounded-xl shadow-xl hover:bg-blue-700 transition-all font-black uppercase tracking-[0.1em] text-sm flex items-center active:scale-95 disabled:bg-gray-400">
-                  <HiSave className="mr-3 h-5 w-5" />
+                <button type="submit" disabled={loading} className="px-8 md:px-12 py-3 md:py-4 bg-[#c92228] text-white-theme rounded-xl shadow-xl hover:bg-[#a01b20] transition-all font-black uppercase tracking-[0.1em] text-xs md:text-sm flex items-center justify-center active:scale-95 disabled:bg-gray-700 shrink-0">
+                  <HiSave className="mr-2 md:mr-3 h-4 w-4 md:h-5 md:w-5" />
                   {loading ? 'Saving...' : 'Deploy Content'}
                 </button>
               </div>

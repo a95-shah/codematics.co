@@ -1,6 +1,6 @@
 // /src/app/admin/layout.jsx
 "use client";
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { signOut, useSession, SessionProvider } from 'next-auth/react';
@@ -13,12 +13,30 @@ import {
   HiMail, 
   HiLightningBolt, 
   HiDocumentText,
-  HiLogout
+  HiLogout,
+  HiMenu,
+  HiX
 } from 'react-icons/hi';
 
 function AdminLayoutContent({ children }) {
   const pathname = usePathname();
   const { data: session } = useSession();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // Close sidebar when route changes (mobile)
+  useEffect(() => {
+    setSidebarOpen(false);
+  }, [pathname]);
+
+  // Prevent body scroll when sidebar is open on mobile
+  useEffect(() => {
+    if (sidebarOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [sidebarOpen]);
 
   // Don't show sidebar on login page
   if (pathname === '/admin/login') return <div className="min-h-screen bg-bg-primary text-white-theme font-body">{children}</div>;
@@ -36,8 +54,36 @@ function AdminLayoutContent({ children }) {
 
   return (
     <div className="flex min-h-screen bg-bg-primary text-white-theme font-body selection:bg-red-600/30">
+      
+      {/* Mobile Top Bar */}
+      <div className="fixed top-0 left-0 right-0 h-16 bg-bg-secondary border-b border-glass-border z-50 flex items-center justify-between px-4 lg:hidden">
+        <Link href="/" className="flex items-center gap-2 group">
+          <span className="font-heading font-bold text-lg tracking-tighter">
+            <span className="text-white-theme">CODE</span>
+            <span className="text-[#c92228]">MATICS</span>
+          </span>
+        </Link>
+        <button 
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          className="p-2 text-white-theme hover:bg-glass-bg rounded-xl transition-all active:scale-90"
+          aria-label="Toggle menu"
+        >
+          {sidebarOpen ? <HiX className="h-6 w-6" /> : <HiMenu className="h-6 w-6" />}
+        </button>
+      </div>
+
+      {/* Mobile Overlay */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <aside className="fixed left-0 top-0 bottom-0 w-[240px] bg-bg-secondary border-r border-glass-border shadow-2xl z-50 flex flex-col transition-all duration-300">
+      <aside className={`fixed left-0 top-0 bottom-0 w-[240px] bg-bg-secondary border-r border-glass-border shadow-2xl z-50 flex flex-col transition-transform duration-300 
+        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}
+      >
         <div className="p-6 mb-2 shrink-0">
           <Link href="/" className="flex items-center gap-2 group transition-transform hover:scale-105 active:scale-95">
              <span className="font-heading font-bold text-xl tracking-tighter">
@@ -99,8 +145,8 @@ function AdminLayoutContent({ children }) {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 min-w-0 ml-[240px] min-h-screen bg-bg-primary relative overflow-x-hidden">
-        <div className="w-full max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
+      <main className="flex-1 min-w-0 ml-0 lg:ml-[240px] min-h-screen bg-bg-primary relative overflow-x-hidden pt-16 lg:pt-0">
+        <div className="w-full max-w-6xl mx-auto p-3 sm:p-6 lg:p-8">
           <div className="animate-fade-in">
             {children}
           </div>
