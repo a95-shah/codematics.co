@@ -410,15 +410,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ===== LOADING / ERROR OVERLAY ===== */}
-      {loading && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-bg-primary/80 backdrop-blur-sm pointer-events-none">
-          <div className="flex flex-col items-center gap-4">
-            <div className="w-10 h-10 border-3 border-red border-t-transparent rounded-full animate-spin" />
-            <p className="text-gray-400 text-sm font-medium">Loading...</p>
-          </div>
-        </div>
-      )}
+      {/* ===== ERROR OVERLAY ===== */}
 
       {error && !loading && (
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-6 py-3 bg-red-900/90 border border-red-600/30 text-white text-sm rounded-xl shadow-2xl backdrop-blur-sm">
