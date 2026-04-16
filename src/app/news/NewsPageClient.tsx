@@ -18,7 +18,7 @@ export default function NewsPageClient() {
         <div className="text-center z-[1] px-6">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
             <div className="hero-badge mb-6">Blog & Updates</div>
-            <h1 className="text-[clamp(2.5rem,5vw,4rem)] font-black mb-5 font-heading">
+            <h1 className="text-[clamp(2rem,3vw,3rem)] font-black mb-5 font-heading">
               <span className="text-white-theme">Latest</span> <span className="text-[#c92228]">News</span>
             </h1>
             <p className="text-[1.1rem] text-gray-300 max-w-[600px] mx-auto leading-[1.8]">

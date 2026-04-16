@@ -9,13 +9,13 @@ export default function LayoutSwitcher({ children }: { children: ReactNode }) {
   const isAdmin = pathname?.startsWith('/admin');
 
   if (isAdmin) {
-     return <main>{children}</main>;
+     return <main key={pathname}>{children}</main>;
   }
 
   return (
     <>
       <Navbar />
-      <main>{children}</main>
+      <main key={pathname}>{children}</main>
       <Footer />
     </>
   );
